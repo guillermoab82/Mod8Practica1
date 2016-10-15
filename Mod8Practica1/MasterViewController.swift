@@ -39,7 +39,8 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     }
 
     func insertNewObject(sender: AnyObject) {
-        let context = self.fetchedResultsController.managedObjectContext
+        self.performSegueWithIdentifier("nuevo", sender: self)
+        /*let context = self.fetchedResultsController.managedObjectContext
         let entity = self.fetchedResultsController.fetchRequest.entity!
         let newManagedObject = NSEntityDescription.insertNewObjectForEntityForName(entity.name!, inManagedObjectContext: context)
              
@@ -55,7 +56,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
             //print("Unresolved error \(error), \(error.userInfo)")
             abort()
-        }
+        }*/
     }
 
     // MARK: - Segues
@@ -185,6 +186,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
         self.tableView.endUpdates()
     }
+
 
     /*
      // Implementing the above methods to update the table view in response to individual changes may have performance implications if a large number of changes are made simultaneously. If this proves to be an issue, you can instead just implement controllerDidChangeContent: which notifies the delegate that all section and object changes have been processed.

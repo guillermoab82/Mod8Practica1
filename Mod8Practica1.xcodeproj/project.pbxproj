@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EF0818111DB27F3B00C027E7 /* NuevoRViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF0818101DB27F3B00C027E7 /* NuevoRViewController.swift */; };
 		EFE122F51DB19F2400157801 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFE122F41DB19F2400157801 /* AppDelegate.swift */; };
 		EFE122F81DB19F2400157801 /* Mod8Practica1.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EFE122F61DB19F2400157801 /* Mod8Practica1.xcdatamodeld */; };
 		EFE122FA1DB19F2400157801 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFE122F91DB19F2400157801 /* MasterViewController.swift */; };
@@ -18,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		EF0818101DB27F3B00C027E7 /* NuevoRViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NuevoRViewController.swift; path = ../NuevoRViewController.swift; sourceTree = "<group>"; };
 		EFE122F11DB19F2300157801 /* Mod8Practica1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mod8Practica1.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EFE122F41DB19F2400157801 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EFE122F71DB19F2400157801 /* Mod8Practica1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Mod8Practica1.xcdatamodel; sourceTree = "<group>"; };
@@ -61,6 +63,7 @@
 			isa = PBXGroup;
 			children = (
 				EFE1230B1DB1A02900157801 /* PetCens.sqlite */,
+				EF0818101DB27F3B00C027E7 /* NuevoRViewController.swift */,
 				EFE122F41DB19F2400157801 /* AppDelegate.swift */,
 				EFE122F91DB19F2400157801 /* MasterViewController.swift */,
 				EFE122FB1DB19F2400157801 /* DetailViewController.swift */,
@@ -148,6 +151,7 @@
 				EFE122F81DB19F2400157801 /* Mod8Practica1.xcdatamodeld in Sources */,
 				EFE122F51DB19F2400157801 /* AppDelegate.swift in Sources */,
 				EFE122FA1DB19F2400157801 /* MasterViewController.swift in Sources */,
+				EF0818111DB27F3B00C027E7 /* NuevoRViewController.swift in Sources */,
 				EFE122FC1DB19F2400157801 /* DetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -300,6 +304,7 @@
 				EFE1230A1DB19F2400157801 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
