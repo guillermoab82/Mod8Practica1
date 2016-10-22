@@ -33,6 +33,8 @@ class NuevoRViewController: UIViewController, UITextFieldDelegate, UIPickerViewD
         let fechaString = formato.stringFromDate(self.pickerFN.date)
         self.txtFechaNac.text = fechaString
     }
+    
+    
     // Métodos necesarios para el UIPickerViewDataSource
     func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int{
         return 1
@@ -50,11 +52,32 @@ class NuevoRViewController: UIViewController, UITextFieldDelegate, UIPickerViewD
     
     func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String?{
         if pickerEstados.isEqual(pickerView){
+            //self.txtEstado.text = (estados![row].valueForKey("nombreEstado") as! String)
             return (estados![row].valueForKey("nombreEstado") as! String)
         }else if pickerMunicipios.isEqual(pickerView){
+            //self.txtMunicipio.text = (municipios![row] as! String)
             return (municipios![row] as! String)
         }else{
+            //self.txtColonia.text = (colonias![row] as! String)
             return (colonias![row] as! String)
+        }
+    }
+    
+    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int){
+        //El picker solo tiene un componente, entonces "compoment"no se usa
+        if pickerEstados.isEqual(pickerView){
+            self.txtEstado.text = (estados![row].valueForKey("nombreEstado") as! String)
+            let codigoEstado = (estados![row].valueForKey("c_estado") as! String)
+            //Invocar el otro WS para llenar el picker de municipios
+            SOAPManager.instance.consultaMunicipios(codigoEstado)
+        }else{
+            if pickerMunicipios.isEqual(pickerView){
+                self.txtMunicipio.text = (municipios![row] as! String)
+            }else{
+                if pickerColonias.isEqual(pickerView){
+                    self.txtColonia.text = (colonias![row] as! String)
+                }
+            }
         }
     }
     //HASTA AQUÍ LOS MÉTODOS DEL UIPickerViewDataSource
@@ -64,14 +87,27 @@ class NuevoRViewController: UIViewController, UITextFieldDelegate, UIPickerViewD
         var elFrame:CGRect = elPicker.frame
         UIView.animateWithDuration(0.5){
             if subeObaja {
-                elFrame.origin.y = CGRectGetMaxY(self.txtFechaNac.frame)
+                if elPicker.isEqual(self.pickerFN){
+                    elFrame.origin.y = CGRectGetMaxY(self.txtFechaNac.frame)
+                }else{
+                    if elPicker.isEqual(self.pickerEstados){
+                        elFrame.origin.y = CGRectGetMaxY(self.txtEstado.frame) - (elFrame.height/2)
+                    }else{
+                        if elPicker.isEqual(self.pickerMunicipios){
+                            elFrame.origin.y = CGRectGetMinY(self.txtMunicipio.frame) - (elFrame.height/2)
+                        }else{
+                            if elPicker.isEqual(self.pickerColonias){
+                                elFrame.origin.y = CGRectGetMaxY(self.txtColonia.frame) - (elFrame.height/2)//((CGRectGetMaxY(elPicker.frame) - CGRectGetMinY(elPicker.frame))/2)
+                            }
+                        }
+                    }
+                }
                 elPicker.hidden = false
             }else{
                 elFrame.origin.y = CGRectGetMaxY(self.view.frame)
                 elPicker.hidden = true
             }
             elPicker.frame = elFrame
-            
         }
     }
     
@@ -92,8 +128,15 @@ class NuevoRViewController: UIViewController, UITextFieldDelegate, UIPickerViewD
             self.txtNombre.resignFirstResponder()
             self.txtApellidos.resignFirstResponder()
             self.txtCalleNum.resignFirstResponder()
+            self.ocultaPickers()
             if textField.isEqual(self.txtFechaNac){
                 self.subeBajaPicker(self.pickerFN,subeObaja:true)
+            }else if textField.isEqual(self.txtEstado){
+                self.subeBajaPicker(self.pickerEstados, subeObaja: true)
+            }else if textField.isEqual(self.txtMunicipio){
+                self.subeBajaPicker(self.pickerMunicipios, subeObaja: true)
+            }else{
+                self.subeBajaPicker(self.pickerColonias, subeObaja: true)
             }
             return false
         }
@@ -109,7 +152,11 @@ class NuevoRViewController: UIViewController, UITextFieldDelegate, UIPickerViewD
         self.txtMunicipio.delegate = self
         self.txtColonia.delegate = self
         self.pickerEstados.delegate = self
+        self.pickerEstados.dataSource = self
         self.pickerFN.hidden = true
+        self.pickerEstados.hidden = true
+        self.pickerMunicipios.hidden = true
+        self.pickerColonias.hidden = true
         self.estados = NSArray()
         //Inicializamos con datos temporales
         self.municipios = ["Cd.Victoria","Matamoros","Reynosa"]//NSArray()
@@ -127,9 +174,17 @@ class NuevoRViewController: UIViewController, UITextFieldDelegate, UIPickerViewD
     
     func ocultaPickers() {
         var unFrame:CGRect
-        unFrame = self.pickerFN.frame
+        for viewpicker in self.view.subviews as [UIView]{
+            if viewpicker.isKindOfClass(UIPickerView) || viewpicker.isKindOfClass(UIDatePicker){
+                unFrame = viewpicker.frame
+                viewpicker.frame = CGRectMake(unFrame.origin.x, CGRectGetMaxY(self.view.frame), unFrame.size.width, unFrame.size.height)
+                viewpicker.hidden = true
+            }
+            
+        }
+        /*unFrame = self.pickerFN.frame
         self.pickerFN.frame = CGRectMake(unFrame.origin.x, CGRectGetMaxY(self.view.frame), unFrame.size.width, unFrame.size.height)
-        self.pickerFN.hidden = true
+        self.pickerFN.hidden = true*/
     }
 
     override func didReceiveMemoryWarning() {
@@ -138,17 +193,23 @@ class NuevoRViewController: UIViewController, UITextFieldDelegate, UIPickerViewD
     }
     
     func consultaEstados() {
-        let urlString = "http://edg3.mx/webservicessepomex/WMRegresaEstados.php"
-        let laURL = NSURL(string: urlString)!
-        let elRequest = NSURLRequest(URL: laURL)
-        self.datosRecibidos = NSMutableData(capacity: 0)
-        self.conexion = NSURLConnection(request: elRequest, delegate: self)
-        if self.conexion == nil {
-            self.datosRecibidos = nil
-            self.conexion = nil
-            print("No se puede acceder al WS Estados")
+        if ConnectionManager.hayConexion() {
+            if !ConnectionManager.esConexionWiFi(){
+                //Si hay conexion, peroes celular, preguntar al usuario
+                //si quiere descargar el contenido
+            }
+            let urlString = "http://edg3.mx/webservicessepomex/WMRegresaEstados.php"
+            let laURL = NSURL(string: urlString)!
+            let elRequest = NSURLRequest(URL: laURL)
+            self.datosRecibidos = NSMutableData(capacity: 0)
+            self.conexion = NSURLConnection(request: elRequest, delegate: self)
+            if self.conexion == nil {
+                self.datosRecibidos = nil
+                self.conexion = nil
+                print("No se puede acceder al WS Estados")
+            }
         }else{
-            
+            print("No hay conexion a internet")
         }
     }
     

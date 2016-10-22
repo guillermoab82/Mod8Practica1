@@ -219,13 +219,13 @@
                                 </connections>
                             </datePicker>
                             <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="S3y-9p-dqr">
-                                <rect key="frame" x="313" y="188" width="227" height="105"/>
+                                <rect key="frame" x="313" y="152" width="227" height="102"/>
                             </pickerView>
                             <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8G9-Gg-Jnu">
-                                <rect key="frame" x="20" y="475" width="227" height="105"/>
+                                <rect key="frame" x="313" y="242" width="227" height="117"/>
                             </pickerView>
                             <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="drh-XV-nmj">
-                                <rect key="frame" x="323" y="388" width="227" height="105"/>
+                                <rect key="frame" x="312" y="189" width="227" height="126"/>
                             </pickerView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
